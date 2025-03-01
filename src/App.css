@@ -1,15 +1,73 @@
-.menu{
-  width: 750px;
-  height: 50px;
-  display: flex;
-  justify-content: space-evenly;
-  border-radius: 5px;
-  align-items: center;
-  background-color: #a3a3a32d;
-  margin: auto;
-  margin-top: 10px;
+.menu-container {
+  position: relative;
+  text-align: center;
 }
 
+.menu-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-left: 0px;
+}
+
+.menu-button:hover {
+  background-color: #555;
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  background: #f9f9f9;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.menu-section {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-section label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.menu button {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.menu button:hover {
+  background-color: #777;
+}
+
+.menu input[type="color"],
+.menu select,
+.menu input[type="range"] {
+  margin: 5px;
+}
+.App h1{
+  text-align: center;
+  width:100%
+}
 .draw-area{
   width: 1200px;
   height: 720px;
@@ -18,8 +76,4 @@
   background-color: white;
   margin-left: 140px;
   
-}
-
-.App h1{
-  text-align: center;
 }
