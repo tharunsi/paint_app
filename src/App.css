@@ -77,3 +77,48 @@
   margin-left: 140px;
   
 }
+
+@media (max-width: 768px) {
+  .menu-dropdown {
+    width: 90%;
+    left: 5%;
+    transform: none;
+  }
+
+  .draw-area {
+    width: 100%;
+    height: 300px;
+  }
+
+  .menu-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+
+  .menu-section {
+    padding: 6px;
+  }
+
+  .menu-section button {
+    font-size: 14px;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .draw-area {
+    width: 100%;
+    height: 250px;
+  }
+
+  .menu-dropdown {
+    width: 100%;
+    left: 0;
+    border-radius: 0;
+  }
+
+  .menu-section button {
+    font-size: 12px;
+    padding: 4px;
+  }
+}
