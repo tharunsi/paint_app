@@ -13,6 +13,7 @@ const App = () => {
   const [isDraw, setIsDraw] = useState(false);
   const [history, setHistory] = useState([]);
   const [step, setStep] = useState(-1);
+  const [startPos, setStartPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -56,52 +57,56 @@ const App = () => {
   };
 
   const startDraw = (e) => {
-    const { offsetX, offsetY } = e.nativeEvent;
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
+  
     ctxRef.current.beginPath();
-    ctxRef.current.moveTo(offsetX, offsetY);
+    ctxRef.current.moveTo(x, y);
+  
+    setStartPos({ x, y }); // Store start position
     setIsDraw(true);
-
-    if (shape !== "none") {
-      ctxRef.current.startX = offsetX;
-      ctxRef.current.startY = offsetY;
-    }
   };
 
   const endDraw = (e) => {
     if (!isDraw) return;
     setIsDraw(false);
 
-    if (shape !== "none") {
-      const { offsetX, offsetY } = e.nativeEvent;
-      const ctx = ctxRef.current;
-      ctx.beginPath();
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
 
-      switch (shape) {
-        case "rectangle":
-          ctx.rect(ctx.startX, ctx.startY, offsetX - ctx.startX, offsetY - ctx.startY);
-          break;
-        case "circle":
-          const radius = Math.sqrt(Math.pow(offsetX - ctx.startX, 2) + Math.pow(offsetY - ctx.startY, 2));
-          ctx.arc(ctx.startX, ctx.startY, radius, 0, Math.PI * 2);
-          break;
-        case "line":
-          ctx.moveTo(ctx.startX, ctx.startY);
-          ctx.lineTo(offsetX, offsetY);
-          break;
-        default:
-          break;
-      }
+    const ctx = ctxRef.current;
+    ctx.strokeStyle = isEraser ? "white" : brushColor;
+    ctx.beginPath();
 
-      ctx.stroke();
-      ctx.closePath();
+    switch (shape) {
+      case "rectangle":
+        ctx.strokeRect(startPos.x, startPos.y, x - startPos.x, y - startPos.y);
+        break;
+      case "circle":
+        const radius = Math.sqrt((x - startPos.x) ** 2 + (y - startPos.y) ** 2);
+        ctx.arc(startPos.x, startPos.y, radius, 0, Math.PI * 2);
+        break;
+      case "line":
+        ctx.moveTo(startPos.x, startPos.y);
+        ctx.lineTo(x, y);
+        break;
+      default:
+        return;
     }
 
+    ctx.stroke();
+    ctx.closePath();
     saveState();
+    setShape("none");
   };
 
   const draw = (e) => {
     if (!isDraw || shape !== "none") return;
-    ctxRef.current.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+
+    const x = e.nativeEvent.offsetX;
+    const y = e.nativeEvent.offsetY;
+
+    ctxRef.current.lineTo(x, y);
     ctxRef.current.stroke();
   };
 
@@ -159,7 +164,15 @@ const App = () => {
     <div className='App'>
       <h1>Paint App</h1>
       <Menu {...{ setBrushColor, setBrushOpacity, setBrushWidth, toggleEraser, isEraser, clearCanvas, saveImage, undo, redo, setShape, uploadImage, addText, applyGradient }} />
-      <canvas width="1200px" height="500px"className='draw-area' ref={canvasRef} onMouseDown={startDraw} onMouseUp={endDraw} onMouseMove={draw} />
+      <canvas 
+        width="1500px" 
+        height="600px" 
+        className='draw-area' 
+        ref={canvasRef} 
+        onMouseDown={startDraw} 
+        onMouseUp={endDraw} 
+        onMouseMove={draw} 
+      />
     </div>
   );
 };
